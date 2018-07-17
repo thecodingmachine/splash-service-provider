@@ -27,6 +27,11 @@
     "cs-check": "phpcs",
     "cs-fix": "phpcbf"
   },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "10.0.x-dev"
+    }
+  },
   "minimum-stability": "dev",
   "prefer-stable": true
 }
