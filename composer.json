@@ -8,6 +8,11 @@
       "TheCodingMachine\\Splash\\DI\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "TheCodingMachine\\Splash\\DI\\": "tests/"
+    }
+  },
   "require": {
     "php": ">=7.1",
     "thecodingmachine/funky": "^1",

@@ -3,7 +3,7 @@
 namespace TheCodingMachine\Splash\DI;
 
 use Doctrine\Common\Annotations\Reader;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use TheCodingMachine\Funky\Annotations\Extension;
 use TheCodingMachine\Funky\Annotations\Factory;
 use TheCodingMachine\Funky\ServiceProvider;
