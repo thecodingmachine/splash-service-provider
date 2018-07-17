@@ -1,6 +1,7 @@
 <?php
 
-namespace TheCodingMachine\Router
+namespace TheCodingMachine\Splash\DI;
+
 use Doctrine\Common\Annotations\Reader;
 use Interop\Container\ContainerInterface;
 use TheCodingMachine\Funky\Annotations\Extension;
