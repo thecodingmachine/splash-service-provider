@@ -20,8 +20,28 @@ If your container supports [thecodingmachine/discovery](https://github.com/theco
 
 ## Introduction
 
-This service provider is meant to install the Splash router.
-Read the "standalone splash install documentation" for more details.
+Splash provides a service-provider to be easily integrated in any [container-interop/service-provider](https://github.com/container-interop/service-provider) compatible framework/container.
+
+If you need a complete working sample, check the [Splash standalone installation guide](https://thecodingmachine.github.io/splash-router/doc/install/standalone.html).
+
+This service provider will provide a default Splash router.
+ 
+It requires an instance of Doctrine's annotation reader to be available.
+
+Note: you can get a service provider providing a Doctrine annotation reader using the following packages:
+ 
+```
+composer require thecodingmachine/doctrine-annotations-universal-module
+```
+
+It will use a PSR-6 cache if the cache is available.
+Note: you can get a service provider providing a working PSR-6 cache using the following packages:
+ 
+```
+composer require thecodingmachine/stash-universal-module
+```
+
+This will install Stash and its related service-provider.
 
 ## Expected values / services
 
@@ -29,9 +49,13 @@ This *service provider* expects the following configuration / services to be ava
 
 | Name                        | Compulsory | Description                            |
 |-----------------------------|------------|----------------------------------------|
-| `thecodingmachine.splash.root_url` (or `root_url`)       | *no*       | The root URL of the application. For instance: "/foo/bar" |
 | `thecodingmachine.splash.controllers`              | *yes*      | An array of controller name (this is the name of the identifier of the controller in the container) |
 | `thecodingmachine.splash.mode`              | *no*      | The mode of Splash (whether it allows output or not). Can be `SplashUtils::MODE_STRICT` or `SplashUtils::MODE_WEAK` |
+| `Doctrine\Common\Annotations\Reader`  | *yes*       | An instance of Doctrine's annotation reader.  |
+| `CacheItemPoolInterface::class`  | *no*       | The PSR-6 cache pool used to cache the routes  |
+| `LoggerInterface::class`  | *no*       | An optional PSR-3 logger |
+| `thecodingmachine.splash.debug`  | *no*       | If true, Splash will display an error with the 'echoed' output in strict mode. Defaults to true. |
+| `thecodingmachine.splash.root_url` (or `root_url`)  | *no*       | The base URL of the application. Defaults to '/'. |
 
 
 ## Provided services
@@ -41,23 +65,20 @@ This *service provider* provides the following services:
 | Service name                | Description                          |
 |-----------------------------|--------------------------------------|
 | `TheCodingMachine\Splash\Routers\SplashRouter`              | The Splash PSR-15 Middleware |
-| `thecodingmachine.splash.route-providers`              | A list of route providers |
-| `TheCodingMachine\Splash\Services\ControllerRegistry`              |  |
+| `thecodingmachine.splash.route-providers`              | A list of "route providers" for Splash (an array of `UrlProviderInterface`). Each route provider is in charge of feeding routes to Splash. By default, this array contains an instance of the `ControllerRegistry` that scans routes of the controllers. |
+| `TheCodingMachine\Splash\Services\ControllerRegistry`              | Instance of `ControllerRegistry`.  |
 | `ControllerAnalyzer`              |  |
-| `ParameterFetcherRegistry`              |  |
+| `ParameterFetcherRegistry`              | Registry class referencing all parameter fetchers |
 | `thecodingmachine.splash.parameter-fetchers`              | A list of ParameterFetcher instances |
-| `SplashRequestFetcher`              |  |
-| `SplashRequestParameterFetcher`              |  |
+| `SplashRequestFetcher`              | An instance of `SplashRequestFetcher` (to autofill the attributes type-hinted on the `ServerRequestInterface`) |
+| `SplashRequestParameterFetcher`              | An instance of `SplashRequestParameterFetcher` (to autofill attributes from the request) |
 | `thecodingmachine.splash.mode`              | Defaults to strict mode |
 
 
 ## Extended services
 
-This *service provider* extends those services:
+This *service provider* registers the `SplashDefaultRouter::class` in the `MiddlewareListServiceProvider::MIDDLEWARES_QUEUE`.
 
-| Name                        | Compulsory | Description                            |
-|-----------------------------|------------|----------------------------------------|
-| `MiddlewareListServiceProvider::MIDDLEWARES_QUEUE` | *yes*      | The Splash middleware is injected in the middleware list. |
-
-
-<small>Project template courtesy of <a href="https://github.com/thecodingmachine/service-provider-template">thecodingmachine/service-provider-template</a></small>
+| Service name                | Description                          |
+|-----------------------------|--------------------------------------|
+| `MiddlewareListServiceProvider::MIDDLEWARES_QUEUE`  | Adds the Splash middleware to this queue (to be used by external routers)  |
