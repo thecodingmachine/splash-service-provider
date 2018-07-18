@@ -26,11 +26,24 @@ class SplashServiceProvider extends ServiceProvider
     /**
      * @Factory()
      */
-    public static function createDefaultRouter(ContainerInterface $container, ParameterFetcherRegistry $parameterFetcherRegistry, LoggerInterface $logger = null, CacheItemPoolInterface $cache = null) : SplashRouter
-    {
+    public static function createDefaultRouter(
+        ContainerInterface $container,
+        ParameterFetcherRegistry $parameterFetcherRegistry,
+        LoggerInterface $logger = null,
+        CacheItemPoolInterface $cache = null
+    ) : SplashRouter {
         $routeProviders = $container->get('thecodingmachine.splash.route-providers');
 
-        $router = new SplashRouter($container, $routeProviders, $parameterFetcherRegistry, $cache, $logger, SplashUtils::MODE_STRICT, true, self::getRootUrl($container));
+        $router = new SplashRouter(
+            $container,
+            $routeProviders,
+            $parameterFetcherRegistry,
+            $cache,
+            $logger,
+            SplashUtils::MODE_STRICT,
+            true,
+            self::getRootUrl($container)
+        );
 
         return $router;
     }
@@ -63,8 +76,10 @@ class SplashServiceProvider extends ServiceProvider
      * @param ControllerAnalyzer $controllerAnalyzer
      * @return ControllerRegistry
      */
-    public static function createControllerRegistry(ContainerInterface $container, ControllerAnalyzer $controllerAnalyzer) : ControllerRegistry
-    {
+    public static function createControllerRegistry(
+        ContainerInterface $container,
+        ControllerAnalyzer $controllerAnalyzer
+    ) : ControllerRegistry {
         return new ControllerRegistry(
             $controllerAnalyzer,
             $container->get('thecodingmachine.splash.controllers')
@@ -76,8 +91,11 @@ class SplashServiceProvider extends ServiceProvider
      * @param ContainerInterface $container
      * @return ControllerAnalyzer
      */
-    public static function createControllerAnalyzer(ContainerInterface $container, ParameterFetcherRegistry $parameterFetcherRegistry, Reader $reader) : ControllerAnalyzer
-    {
+    public static function createControllerAnalyzer(
+        ContainerInterface $container,
+        ParameterFetcherRegistry $parameterFetcherRegistry,
+        Reader $reader
+    ) : ControllerAnalyzer {
         return new ControllerAnalyzer(
             $container,
             $parameterFetcherRegistry,
@@ -99,8 +117,10 @@ class SplashServiceProvider extends ServiceProvider
      * @Factory(name="thecodingmachine.splash.parameter-fetchers")
      * @return ParameterFetcher[]
      */
-    public static function createParameterFetchers(SplashRequestFetcher $splashRequestFetcher, SplashRequestParameterFetcher $splashRequestParameterFetcher) : array
-    {
+    public static function createParameterFetchers(
+        SplashRequestFetcher $splashRequestFetcher,
+        SplashRequestParameterFetcher $splashRequestParameterFetcher
+    ) : array {
         return [
             $splashRequestFetcher,
             $splashRequestParameterFetcher,
@@ -145,8 +165,10 @@ class SplashServiceProvider extends ServiceProvider
     /**
      * @Extension(name=MiddlewareListServiceProvider::MIDDLEWARES_QUEUE)
      */
-    public static function updatePriorityQueue(\SplPriorityQueue $priorityQueue, SplashRouter $splashRouter) : \SplPriorityQueue
-    {
+    public static function updatePriorityQueue(
+        \SplPriorityQueue $priorityQueue,
+        SplashRouter $splashRouter
+    ) : \SplPriorityQueue {
         $priorityQueue->insert($splashRouter, MiddlewareOrder::ROUTER);
         return $priorityQueue;
     }
