@@ -13,9 +13,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 use TheCodingMachine\Splash\DI\Fixtures\TestController2;
 use TheCodingMachine\Splash\Routers\SplashRouter;
 use Simplex\Container;
-use Zend\Diactoros\Response\HtmlResponse;
-use Zend\Diactoros\Response\RedirectResponse;
-use Zend\Diactoros\ServerRequest;
+use Laminas\Diactoros\Response\HtmlResponse;
+use Laminas\Diactoros\Response\RedirectResponse;
+use Laminas\Diactoros\ServerRequest;
 
 class SplashServiceProviderTest extends TestCase
 {
